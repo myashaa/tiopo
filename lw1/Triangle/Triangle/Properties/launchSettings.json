@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Triangle": {
+      "commandName": "Project",
+      "commandLineArgs": "3 4 5"
+    }
+  }
+}
