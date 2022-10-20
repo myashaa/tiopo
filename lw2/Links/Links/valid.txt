@@ -1,0 +1,23 @@
+https://statler.ru 200 OK
+https://statler.ru/page30648940.html 200 OK
+https://statler.ru/page30649793.html 200 OK
+https://statler.ru/page30649893.html 200 OK
+https://statler.ru/page30649956.html 200 OK
+https://statler.ru/trip-altay 200 OK
+https://statler.ru/zefir-hall 200 OK
+https://statler.ru/beauty 200 OK
+https://statler.ru/children 200 OK
+https://statler.ru/rooms 200 OK
+https://statler.ru/faqs 200 OK
+https://statler.ru/contacts 200 OK
+https://statler.ru/trip-altay 200 OK
+https://statler.ru/zefir-hall 200 OK
+https://statler.ru/beauty 200 OK
+https://statler.ru?tl-booking-open=true 200 OK
+https://statler.ru/page30750167.html 200 OK
+https://statler.ru?tl-booking-open=true&amp;room-type=133921 200 OK
+https://statler.ru?tl-booking-open=true&amp;room-type=156909 200 OK
+https://statler.ru?tl-booking-open=true&amp;room-type=133920 200 OK
+https://statler.ru?tl-booking-open=true&amp;room-type=133919 200 OK
+количество ссылок: 21
+дата проверки: 20.10.2022 11:10:58

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Links": {
+      "commandName": "Project",
+      "commandLineArgs": "https://statler.ru"
+    }
+  }
+}
