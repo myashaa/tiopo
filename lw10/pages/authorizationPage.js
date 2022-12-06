@@ -3,6 +3,7 @@ import { Element } from '../element.js';
 import { By, until } from 'selenium-webdriver';
 
 import authorizationData from '../data/authorizationData.js'
+import constants from '../constants.js'
 
 export class AuthorizationPage {
     constructor(browser) {
@@ -10,8 +11,8 @@ export class AuthorizationPage {
     }
 
     async EnterLoginAndPassword() {
-        const loginInput = new Element(this._browser, By.xpath('/html/body/div[4]/div[3]/div/div/div/div/div[2]/div/form/div[1]/input'));
-        const passwordInput = new Element(this._browser, By.xpath('/html/body/div[4]/div[3]/div/div/div/div/div[2]/div/form/div[2]/input'));
+        const loginInput = new Element(this._browser, By.xpath(constants.loginInputXpath));
+        const passwordInput = new Element(this._browser, By.xpath(constants.passwordInputXpath));
 
         await loginInput.sendKeys(authorizationData.login);
         await passwordInput.sendKeys(authorizationData.password);
@@ -19,18 +20,18 @@ export class AuthorizationPage {
 
     async LogIn()
     {
-        const enterButton = new Element(this._browser, By.xpath('/html/body/div[4]/div[3]/div/div/div/div/div[2]/div/form/button'));
+        const enterButton = new Element(this._browser, By.xpath(constants.enterButtonXpath));
 
         await enterButton.click();
 
         let driver = await this._browser.driver();
-        await driver.sleep(5000);
+        await driver.sleep(constants.sleepTime);
     }
 
     async CheckLoginSuccessful()
     {
         try {
-            const successBlock = new Element(this._browser, By.xpath('/html/body/div[4]/div[1]/div/div/div'));
+            const successBlock = new Element(this._browser, By.xpath(constants.successBlockXpath));
             return true;
         }
         catch {
@@ -40,12 +41,12 @@ export class AuthorizationPage {
 
     async goToHomePage()
     {
-        const homeButton = new Element(this._browser, By.xpath('/html/body/div[2]/a'));
+        const homeButton = new Element(this._browser, By.css(constants.homeButtonCss));
         
         await homeButton.click();
 
         let driver = await this._browser.driver();
-        await driver.sleep(5000);
+        await driver.sleep(constants.sleepTime);
     }
 
 }

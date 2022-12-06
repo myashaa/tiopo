@@ -4,6 +4,7 @@ import { By, until } from 'selenium-webdriver';
 
 import watchData from '../data/watchData.js'
 import urls from '../config.js'
+import constants from '../constants.js'
 
 export class HomePage {
     constructor(browser) {
@@ -16,41 +17,41 @@ export class HomePage {
 
     async goToLoginPage()
     {
-        const accountButton = new Element(this._browser, By.xpath('/html/body/div[1]/div/div/div[1]/div/div[2]/a'));
+        const accountButton = new Element(this._browser, By.xpath(constants.accountButtonXpath));
 
         await accountButton.click();
 
-        const entryButton = new Element(this._browser, By.xpath('/html/body/div[1]/div/div/div[1]/div/div[2]/ul/li[1]/a'));
+        const entryButton = new Element(this._browser, By.css(constants.entryButtonCss));
         
         await entryButton.click();
-        await this._browser.wait(until.titleIs('Вход'), 5000)
+        await this._browser.wait(until.titleIs(constants.logInTitle), constants.waitTime);
     }
 
     async findWatch()
     {
-        const searchInput = new Element(this._browser, By.xpath('//*[@id="typeahead"]'));
+        const searchInput = new Element(this._browser, By.xpath(constants.searchInputXpath));
 
         await searchInput.sendKeys(watchData.name);
         
-        const searchBuuton = new Element(this._browser, By.xpath('/html/body/div[3]/div/div/div[2]/div/form/input'));
+        const searchButton = new Element(this._browser, By.css(constants.searchButtonCss));
         
-        await searchBuuton.click();
+        await searchButton.click();
 
         this._watch = new Element(this._browser, By.partialLinkText(watchData.name)); 
     }
 
     async openWatch()
     {
-        this._watch = new Element(this._browser, By.xpath('/html/body/div[4]/div[4]/div/div/div/div[2]/div/a')); 
+        this._watch = new Element(this._browser, By.css(constants.watchCss)); 
     }
 
     async goToWatchInfoPage()
     {
         await this._watch.click();
-        await this._browser.wait(until.titleIs(watchData.name), 5000);
+        await this._browser.wait(until.titleIs(watchData.name), constants.waitTime);
 
         let driver = await this._browser.driver();
-        await driver.sleep(5000);
+        await driver.sleep(constants.sleepTime);
     }
 
 }

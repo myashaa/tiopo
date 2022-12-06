@@ -3,6 +3,7 @@ import { Element } from '../element.js';
 import { By, until } from 'selenium-webdriver';
 
 import watchData from '../data/watchData.js'
+import constants from '../constants.js'
 
 export class WatchInfoPage {
     constructor(browser) {
@@ -11,36 +12,36 @@ export class WatchInfoPage {
 
     async addWatchInCart()
     {
-        const addToCartButton = new Element(this._browser, By.xpath('/html/body/div[4]/div[3]/div/div/div[1]/div[1]/div[2]/div/a'));
+        const addToCartButton = new Element(this._browser, By.xpath(constants.addToCartButtonXpath));
 
         await addToCartButton.click();
 
         const driver = await this._browser.driver();
-        await driver.sleep(5000);
+        await driver.sleep(constants.sleepTime);
 
-        const modal = new Element(this._browser, By.className('modal-content'));
+        const modal = new Element(this._browser, By.xpath(constants.modal));
         const watchAdded = await modal.findElement(By.partialLinkText(watchData.name));
     }
 
     async placeOrder() {
-        const placeOrderButton = new Element(this._browser, By.xpath('//*[@id="cart"]/div/div/div[3]/a'));
+        const placeOrderButton = new Element(this._browser, By.xpath(constants.placeOrderButtonXpath));
 
         await placeOrderButton.click();
 
         const driver = await this._browser.driver();
-        await driver.sleep(5000);
+        await driver.sleep(constants.sleepTime);
 
-        const placeButton = new Element(this._browser, By.xpath('/html/body/div[4]/div[3]/div/div/div/div/div[3]/form/button'));
+        const placeButton = new Element(this._browser, By.xpath(constants.placeButtonXpath));
 
         await placeButton.click();
 
-        await driver.sleep(5000);
+        await driver.sleep(constants.sleepTime);
     }
 
     async CheckOrderPlacedSuccessfully()
     {
         try {
-            const successBlock = new Element(this._browser, By.xpath('/html/body/div[4]/div[1]/div/div/div'));
+            const successBlock = new Element(this._browser, By.xpath(constants.successBlockXpath));
             return true;
         }
         catch {
