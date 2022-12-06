@@ -30,6 +30,22 @@ describe("Магазин", function () {
     }
   });
 
+  async function createInvalidProduct(testData) {
+    let createResponse = await productsController.createProduct(testData);
+    let createResponseBody = createResponse.body;
+
+    //при неуспешном запросе должен возвращаться статус 0
+    checkServerResponse(createResponseBody, false);
+
+    idOfCreatedProducts.push(createResponseBody.id);
+
+    let getResponse = await productsController.getAllProducts();
+    let getResponseBody = getResponse.body;
+    let product = getResponseBody.find(item => item.id == createResponseBody.id);
+
+    assert(!product, "Невалидный товар обнаружен в списке всех товаров");
+  }
+
   //JSON.parse вынести в controller
   //вынести проверку на статус и ошибку сервера
 
@@ -37,17 +53,20 @@ describe("Магазин", function () {
     const getResponse = await productsController.getAllProducts();
     const getResponseBody = getResponse.body;
 
+    checkServerResponse(getResponseBody, true);
+
     getResponseBody.forEach((product) => {
       checker.checkProduct(product);
     });
 
     assert(getResponseBody.length > 0, "Cписок товаров пуст");
-    checkServerResponse(getResponseBody, true);
   });
    
   it("Успешное создание товара", async () => {
     const createResponse = await productsController.createProduct(testData.validProductForCreate);
     const createResponseBody = createResponse.body;
+
+    checkServerResponse(createResponseBody, true);
 
     idOfCreatedProducts.push(createResponseBody.id);
 
@@ -60,79 +79,35 @@ describe("Магазин", function () {
     product = lodash.omit(product, ["id"]);
     assert(lodash.isEqual(testData.validProductAfterCreate, product), "Изменяемый и измененный товар различны");
 
-    checkServerResponse(createResponseBody, true);
   });
  
   //createProduct возвращает html-документ
   it("Неуспешное создание товара с невалидными данными", async () => {
-    //все поля невалидные
-    let createResponse = await productsController.createProduct(testData.invalidProductForCreate);
-    let createResponseBody = createResponse.body;
+    createInvalidProduct(testData.invalidProductForCreate);
+  });
 
-    idOfCreatedProducts.push(createResponseBody.id);
+  //createProduct возвращает html-документ
+  it("Неуспешное создание товара, когда значение поля category_id не лежит в заданном диапазоне", async () => {
+    createInvalidProduct(testData.invalidCategoryIdInProductForCreate);
+  });
 
-    let getResponse = await productsController.getAllProducts();
-    let getResponseBody = getResponse.body;
-    let product = getResponseBody.find(item => item.id == createResponseBody.id);
+  //createProduct возвращает html-документ
+  it("Неуспешное создание товара, когда значение поля status не лежит в заданном диапазоне", async () => {
+    createInvalidProduct(testData.invalidStatusInProductForCreate);
+  });
 
-    assert(!product, "Невалидный товар обнаружен в списке всех товаров");
-
-    //при неуспешном запросе должен возвращаться статус 0
-    checkServerResponse(createResponseBody, false);
-
-
-    //значение поля category_id не лежит в заданном диапазоне
-    createResponse = await productsController.createProduct(testData.invalidCategoryIdInProductForCreate);
-    createResponseBody = createResponse.body;
-
-    idOfCreatedProducts.push(createResponseBody.id);
-
-    getResponse = await productsController.getAllProducts();
-    getResponseBody = getResponse.body;
-    product = getResponseBody.find(item => item.id == createResponseBody.id);
-
-    assert(!product, "Невалидный товар обнаружен в списке всех товаров");
-
-    //при неуспешном запросе должен возвращаться статус 0
-    checkServerResponse(createResponseBody, false);
-
-
-    //значение поля status не лежит в заданном диапазоне
-    createResponse = await productsController.createProduct(testData.invalidStatusInProductForCreate);
-    createResponseBody = createResponse.body;
-
-    idOfCreatedProducts.push(createResponseBody.id);
-
-    getResponse = await productsController.getAllProducts();
-    getResponseBody = getResponse.body;
-    product = getResponseBody.find(item => item.id == createResponseBody.id);
-
-    assert(!product, "Невалидный товар обнаружен в списке всех товаров");
-
-    //при неуспешном запросе должен возвращаться статус 0
-    checkServerResponse(createResponseBody, false);
-
-
-    //значение поля hit не лежит в заданном диапазоне
-    createResponse = await productsController.createProduct(testData.invalidHitInProductForCreate);
-    createResponseBody = createResponse.body;
-
-    idOfCreatedProducts.push(createResponseBody.id);
-
-    getResponse = await productsController.getAllProducts();
-    getResponseBody = getResponse.body;
-    product = getResponseBody.find(item => item.id == createResponseBody.id);
-
-    assert(!product, "Невалидный товар обнаружен в списке всех товаров");
-
-    //при неуспешном запросе должен возвращаться статус 0
-    checkServerResponse(createResponseBody, false);
+  //createProduct возвращает html-документ
+  it("Неуспешное создание товара, когда значение поля hit не лежит в заданном диапазоне", async () => {
+    createInvalidProduct(testData.invalidHitInProductForCreate);
   });
 
   //createProduct возвращает html-документ
   it("Неуспешное создание товара с пустыми данными", async () => {
     const createResponse = await productsController.createProduct(testData.emptyProduct);
     const createResponseBody = createResponse.body;
+
+    //при неуспешном запросе должен возвращаться статус 0
+    checkServerResponse(createResponseBody, false);
 
     idOfCreatedProducts.push(createResponseBody.id);
 
@@ -141,9 +116,6 @@ describe("Магазин", function () {
     const product = getResponseBody.find(item => item.id == createResponseBody.id);
 
     assert(!product, "Пустой товар обнаружен в списке всех товаров");
-
-    //при неуспешном запросе должен возвращаться статус 0
-    checkServerResponse(createResponseBody, false);
   });
 
   it("Успешное редактирование товара", async () => {
@@ -161,6 +133,8 @@ describe("Магазин", function () {
     const editResponse = await productsController.editProduct(product);
     const editResponseBody = editResponse.body;
 
+    checkServerResponse(editResponseBody, true);
+
     getResponse = await productsController.getAllProducts();
     getResponseBody = getResponse.body;
     let newProduct = getResponseBody.find(item => item.id == createResponseBody.id);
@@ -170,8 +144,6 @@ describe("Магазин", function () {
     product = lodash.omit(product, ["alias"]);
     newProduct = lodash.omit(newProduct, ["alias"]);
     assert(lodash.isEqual(product, newProduct), "Изменяемый и измененный товар различны");
-
-    checkServerResponse(editResponseBody, true);
   });
   
   //editProduct возвращает html-документ
@@ -190,6 +162,9 @@ describe("Магазин", function () {
     const editResponse = await productsController.editProduct(product);
     const editResponseBody = editResponse.body;
 
+    //при неуспешном запросе должен возвращаться статус 0
+    checkServerResponse(editResponseBody, false);
+
     getResponse = await productsController.getAllProducts();
     getResponseBody = getResponse.body;
     let newProduct = getResponseBody.find(item => item.id == createResponseBody.id);
@@ -197,9 +172,6 @@ describe("Магазин", function () {
     product = lodash.pick(product, ["title", "status"]);
     newProduct = lodash.pick(newProduct, ["title", "status"]);
     assert(!lodash.isEqual(product, newProduct), "Изменяемый и измененный товар одинаковы");
-
-    //при неуспешном запросе должен возвращаться статус 0
-    checkServerResponse(editResponseBody, false);
   });
   
   //editProduct возвращает html-документ
@@ -218,6 +190,9 @@ describe("Магазин", function () {
     const editResponse = await productsController.editProduct(product);
     const editResponseBody = editResponse.body;
 
+    //при неуспешном запросе должен возвращаться статус 0
+    checkServerResponse(editResponseBody, false);
+
     getResponse = await productsController.getAllProducts();
     getResponseBody = getResponse.body;
     let newProduct = getResponseBody.find(item => item.id == createResponseBody.id);
@@ -226,22 +201,19 @@ describe("Магазин", function () {
     product = lodash.omit(product, ["alias"]);
     newProduct = lodash.omit(newProduct, ["alias"]);
     assert(lodash.isEqual(product, newProduct), "Изменяемый и измененный товар различны");
-
-    //при неуспешном запросе должен возвращаться статус 0
-    checkServerResponse(editResponseBody, false);
   });
 
   it("Неуспешное редактирование несуществующего товара", async () => {
     const editResponse = await productsController.editProduct(testData.nonexistentProduct);
     const editResponseBody = editResponse.body;
 
+    checkServerResponse(editResponseBody, false);
+
     const getResponse = await productsController.getAllProducts();
     const getResponseBody = getResponse.body;
     let product = getResponseBody.find(item => item.id == testData.nonexistentProduct.id);
 
     assert(!product, "Невалидный товар обнаружен в списке всех товаров");
-
-    checkServerResponse(editResponseBody, false);
   });
 
   it("Успешное удаление товара", async () => {
@@ -253,13 +225,13 @@ describe("Магазин", function () {
     const deleteResponse = await productsController.deleteProductById(createResponseBody.id);
     const deleteResponseBody = deleteResponse.body;
 
+    checkServerResponse(deleteResponseBody, true);
+
     const getResponse = await productsController.getAllProducts();
     const getResponseBody = getResponse.body;
     const product = getResponseBody.find(item => item.id == createResponseBody.id);
 
     assert(!product, "Удалённый товар присутствует в списке товаров");
-
-    checkServerResponse(deleteResponseBody, true);
   });
 
   it("Неуспешное удаление несуществующего товара", async () => {
@@ -288,13 +260,13 @@ describe("Магазин", function () {
     const secondProduct = getResponseBody.find(item => item.id == secondCreateResponseBody.id);
     const thirdProduct = getResponseBody.find(item => item.id == thirdCreateResponseBody.id);
 
-    assert(firstProduct.alias == "new-watch",
+    assert(firstProduct.alias == "watch",
       "Значение поля alias не соответствует формату 'заголовок'");
 
-    assert(secondProduct.alias == "new-watch-0",
+    assert(secondProduct.alias == "watch-0",
       "Значение поля alias не соответствует формату 'заголовок-0'");
 
-    assert(thirdProduct.alias == "new-watch-0-0",
+    assert(thirdProduct.alias == "watch-0-0",
       "Значение поля alias не соответствует формату 'заголовок-0-0'");
   });
 
@@ -327,13 +299,13 @@ describe("Магазин", function () {
     secondProduct = getResponseBody.find(item => item.id == secondCreateResponseBody.id);
     thirdProduct = getResponseBody.find(item => item.id == thirdCreateResponseBody.id);
 
-    assert(firstProduct.alias == "new-new-watch",
+    assert(firstProduct.alias == "update-watch",
       "Значение поля alias не соответствует формату 'заголовок'");
 
-    assert(secondProduct.alias == "new-new-watch-" + secondProduct.id,
+    assert(secondProduct.alias == "update-watch-" + secondProduct.id,
       "Значение поля alias не соответствует формату 'заголовок-id'");
 
-    assert(thirdProduct.alias == "new-new-watch-" + thirdProduct.id,
+    assert(thirdProduct.alias == "update-watch-" + thirdProduct.id,
       "Значение поля alias не соответствует формату 'заголовок-id'");
   });
 });
