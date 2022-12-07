@@ -34,10 +34,10 @@ describe("Магазин", function () {
     let createResponse = await productsController.createProduct(testData);
     let createResponseBody = createResponse.body;
 
+    idOfCreatedProducts.push(createResponseBody.id);
+
     //при неуспешном запросе должен возвращаться статус 0
     checkServerResponse(createResponseBody, false);
-
-    idOfCreatedProducts.push(createResponseBody.id);
 
     let getResponse = await productsController.getAllProducts();
     let getResponseBody = getResponse.body;
@@ -66,9 +66,9 @@ describe("Магазин", function () {
     const createResponse = await productsController.createProduct(testData.validProductForCreate);
     const createResponseBody = createResponse.body;
 
-    checkServerResponse(createResponseBody, true);
-
     idOfCreatedProducts.push(createResponseBody.id);
+
+    checkServerResponse(createResponseBody, true);
 
     const getResponse = await productsController.getAllProducts();
     const getResponseBody = getResponse.body;
@@ -106,10 +106,10 @@ describe("Магазин", function () {
     const createResponse = await productsController.createProduct(testData.emptyProduct);
     const createResponseBody = createResponse.body;
 
+    idOfCreatedProducts.push(createResponseBody.id);
+
     //при неуспешном запросе должен возвращаться статус 0
     checkServerResponse(createResponseBody, false);
-
-    idOfCreatedProducts.push(createResponseBody.id);
 
     const getResponse = await productsController.getAllProducts();
     const getResponseBody = getResponse.body;
