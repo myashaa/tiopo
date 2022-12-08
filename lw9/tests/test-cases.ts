@@ -3,7 +3,7 @@ export default
   "validProductForCreate":
   {
     "category_id": "4",
-    "title": "Watch",
+    "title": "Name",
     "content": "Content",
     "price": "1729",
     "old_price": "934",
@@ -16,8 +16,8 @@ export default
   "validProductAfterCreate":
   {
     "category_id": "4",
-    "title": "Watch",
-    "alias": "watch",
+    "title": "Name",
+    "alias": "name",
     "content": "Content",
     "price": "1729",
     "old_price": "934",
@@ -45,7 +45,7 @@ export default
   "invalidCategoryIdInProductForCreate":
   {
     "category_id": "16",
-    "title": "Watch",
+    "title": "Name",
     "content": "Content",
     "price": "1729",
     "old_price": "934",
@@ -58,7 +58,7 @@ export default
   "invalidStatusInProductForCreate":
   {
     "category_id": "4",
-    "title": "Watch",
+    "title": "Name",
     "content": "Content",
     "price": "1729",
     "old_price": "934",
@@ -71,7 +71,7 @@ export default
   "invalidHitInProductForCreate":
   {
     "category_id": "4",
-    "title": "Watch",
+    "title": "Name",
     "content": "Content",
     "price": "1729",
     "old_price": "934",
@@ -84,7 +84,7 @@ export default
   "validProductForEdit":
   {
     "category_id": "11",
-    "title": "Update watch",
+    "title": "Update name",
     "content": "Content",
     "price": "4762",
     "old_price": "2158",
@@ -104,7 +104,7 @@ export default
   {
     "id": "0",
     "category_id": "99",
-    "title": "Watch",
+    "title": "Name",
     "content": "Content",
     "price": "2009",
     "old_price": "1999",
